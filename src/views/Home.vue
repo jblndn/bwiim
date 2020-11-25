@@ -1,18 +1,27 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div v-if="sports && sports.length">
+      <div v-for="(sport, index) in sports" :key="index">
+        {{sport}}
+        <router-link :to="{ name: 'Sport', params: { sport_name: sport.key }}">Voir les paris</router-link>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
   name: 'Home',
-  components: {
-    HelloWorld
+  computed: {
+    sports() {
+      return this.$store.state.sports
+    }
+  },
+  created() {
+    this.$store.dispatch({
+      type: 'getSports'
+    })
   }
 }
 </script>
