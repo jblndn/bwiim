@@ -1,18 +1,24 @@
 <template>
     <div>
+        <h1 class="text-3xl font-bold mb-14 mt-10">
+            {{ odds[0].sport_nice }}
+        </h1>
         <div v-if="odds && odds.length">
-            <div v-for="(odd, index) in odds" :key="index">
-                {{odd}}
-            </div>
+            <CardBet v-for="(odd, index) in odds" :key="index" :odd="odd">
+            </CardBet>
         </div>
     </div>
 </template>
 
 <script>
     import axios from "axios";
+    import CardBet from "../components/CardBet";
 
     export default {
         name: "Sport",
+        components: {
+            CardBet
+        },
         data: () => ({
             odds: []
         }),
@@ -28,5 +34,4 @@
 </script>
 
 <style scoped>
-
 </style>

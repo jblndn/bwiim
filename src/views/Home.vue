@@ -1,18 +1,21 @@
 <template>
   <div class="home">
     <div v-if="sports && sports.length">
-      <div v-for="(sport, index) in sports" :key="index">
-        {{sport}}
-        <router-link :to="{ name: 'Sport', params: { sport_name: sport.key }}">Voir les paris</router-link>
-      </div>
+      <CardSport v-for="(sport, index) in sports" :key="index" :sport="sport">
+      </CardSport>
     </div>
 
   </div>
 </template>
 
 <script>
+  import CardSport from "../components/CardSport";
+
 export default {
   name: 'Home',
+  components: {
+    CardSport
+  },
   computed: {
     sports() {
       return this.$store.state.sports
