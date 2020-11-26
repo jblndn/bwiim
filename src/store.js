@@ -5,11 +5,12 @@ const store = createStore({
     state() {
         return {
             sports: [],
-            sportsBets: []
+            sportsBets: [],
+            currentBets: []
         }
     },
     getters: {
-        sportsByGroup(state){
+        sportsByGroup(state) {
             const group = state.sports.reduce((acc, value) => {
 
                 if (!acc[value.group]) {
@@ -28,6 +29,12 @@ const store = createStore({
         },
         pushBets(state, {bets, leagueId}) {
             state.sportsBets[leagueId] = bets
+        },
+        initializeExisitingBets(state, bets) {
+            state.currentBets = bets
+        },
+        createBet(state, bet) {
+            state.currentBets.push(bet)
         }
     },
     actions: {
@@ -38,8 +45,17 @@ const store = createStore({
                 console.error('Error status', error.response.status, error.response.data)
             })
         },
-        setBets (context, {bets, leagueId}) {
+        setBets(context, {bets, leagueId}) {
             context.commit('pushBets', {bets, leagueId})
+        },
+        getCurrentBets(context) {
+            localStorage.getItem('bets') && context.commit('initializeExisitingBets', JSON.parse(localStorage.getItem('bets')));
+        },
+        createBet({commit, state}, {selectedOdd, teams, prediction, amount, potentialWin}) {
+            let newBet = {selectedOdd, teams, prediction, amount, potentialWin};
+            commit('createBet', newBet)
+            const stringify = JSON.stringify(state.currentBets);
+            localStorage.setItem('bets', stringify);
         }
     },
 })

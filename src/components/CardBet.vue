@@ -10,11 +10,11 @@
             </h2>
         </div>
         <div class="flex justify-center" v-if="odd.sites_count">
-            <ButtonOdd v-on:click="updateBetPanel(odd.sites[0].odds.h2h[1]), this.prediction = odd.teams[1]" :h2h="odd.sites[0].odds.h2h[1].toString()">
+            <ButtonOdd :class="{ active: selectedOdd === odd.sites[0].odds.h2h[1] }" v-on:click="updateBetPanel(odd.sites[0].odds.h2h[1]), this.prediction = odd.teams[1]" :h2h="odd.sites[0].odds.h2h[1].toString()">
             </ButtonOdd>
-            <ButtonOdd v-on:click="updateBetPanel(odd.sites[0].odds.h2h[2]), this.prediction = 'Nul'" :h2h="odd.sites[0].odds.h2h[2].toString()" v-if="odd.sites[0].odds.h2h[2]">
+            <ButtonOdd :class="{ active: selectedOdd === odd.sites[0].odds.h2h[2] }"  v-on:click="updateBetPanel(odd.sites[0].odds.h2h[2]), this.prediction = 'Nul'" :h2h="odd.sites[0].odds.h2h[2].toString()" v-if="odd.sites[0].odds.h2h[2]">
             </ButtonOdd>
-            <ButtonOdd v-on:click="updateBetPanel(odd.sites[0].odds.h2h[0]), this.prediction = odd.teams[0]" :h2h="odd.sites[0].odds.h2h[0].toString()">
+            <ButtonOdd :class="{ active: selectedOdd === odd.sites[0].odds.h2h[0] }" v-on:click="updateBetPanel(odd.sites[0].odds.h2h[0]), this.prediction = odd.teams[0]" :h2h="odd.sites[0].odds.h2h[0].toString()">
             </ButtonOdd>
         </div>
         <div class="flex justify-center" v-else>
@@ -29,7 +29,7 @@
                         </button>
                         <div class="text-4xl leading-7 font-bold text-yellow-400">${{ amount }}</div>
 
-                        
+
                         <button v-on:click="addToAmount" class="ml-8 flex-none flex items-center justify-center w-9 h-9 rounded-full bg-yellow-400 text-white" type="button" aria-label="more">
                             +
                         </button>
@@ -37,8 +37,8 @@
                     <div class="stext-center text-2xl leading-7 font-bold text-white mb-5"> x {{ selectedOdd }}</div>
                     <div class="flex space-x-3 mb-4 text-sm font-semibold">
                     <div class="flex-auto flex space-x-3">
-                        <button class="h-12 w-1/2 flex items-center justify-center rounded-full bg-yellow-400 text-white" @click="setStorage">Bet and win {{ potentialWin }}</button>
-                        <button class="h-12 w-1/2 flex items-center justify-center rounded-full bg-white text-yellow-400" type="button">Cancel</button>
+                        <button class="h-12 w-1/2 flex items-center justify-center rounded-full bg-yellow-400 text-white" @click="[createBet({selectedOdd, teams, prediction, amount, potentialWin}), betOpen = false, selectedOdd = 0]" type="button">Bet and win {{ potentialWin }}</button>
+                        <button class="h-12 w-1/2 flex items-center justify-center rounded-full bg-white text-yellow-400" @click="betOpen = false, selectedOdd = 0" type="button">Cancel</button>
                     </div>
                     </div>
                 </form>
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
     import ButtonOdd from "./ButtonOdd";
 
     export default {
@@ -67,10 +68,16 @@
         components: {
             ButtonOdd
         },
+        computed: {
+          teams() {
+              return this.odd.teams
+          }
+        },
         methods: {
             updateBetPanel: function (multiplier) {
                 if(this.selectedOdd == multiplier) {
                     this.betOpen = !this.betOpen
+                    this.selectedOdd = 0
                 } else {
                     this.betOpen = true
                     this.selectedOdd = multiplier
@@ -85,24 +92,14 @@
                 this.amount -= 5
                 this.potentialWin = (this.amount * this.selectedOdd).toFixed(2)
             },
-            setStorage(){
-                let existing = localStorage.getItem('bets');
-
-                if (existing){
-                    let parse = JSON.parse(existing);
-                    this.bets = parse;
-                }
-
-                this.newBet = [this.selectedOdd, this.odd.teams, this.prediction, this.amount, this.potentialWin];
-                this.bets.push(this.newBet);
-                this.newBet = [];
-                const stringify = JSON.stringify(this.bets);
-                localStorage.setItem('bets', stringify);
-
-            }
+            ...mapActions(['createBet'])
         }
     }
 </script>
 
-<style>
+<style scoped>
+    .active {
+        background-color: white;
+        color: rgb(252, 211, 77);
+    }
 </style>

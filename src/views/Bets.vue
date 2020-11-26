@@ -3,10 +3,10 @@
         <div class="w-2/4 m-auto mb-14 shadow p-6 text-left bg-gray-700 text-white rounded-lg" v-for="(bet, index) in bets" :key="index">
             <div class="mb-1">
                 <span class="block text-xs mb-2">
-                    {{ bet[1][1] }} - {{ bet[1][0] }}
+                    {{ bet.teams[1] }} - {{ bet.teams[0] }}
                 </span>
                 <h2 class="text-3xl text-yellow-400">
-                    {{ bet[2]}}
+                    {{ bet.prediction}}
                 </h2>
             </div>
             <div class="text-xl mb-4">
@@ -14,7 +14,7 @@
                         Cote :
                     </span>
                 <span>
-                        {{ bet[0]}}
+                        {{ bet.selectedOdd}}
                     </span>
             </div>
             <div class="flex justify-between mb-2">
@@ -23,7 +23,7 @@
                         Mise :
                     </span>
                     <span>
-                        {{ bet[3]}} $
+                        {{ bet.amount}} $
                     </span>
                 </div>
                 <div class="text-2xl">
@@ -31,7 +31,7 @@
                         Potentiel win :
                     </span>
                         <span class="text-yellow-400">
-                        {{ bet[4]}} $
+                        {{ bet.potentialWin}} $
                     </span>
                 </div>
             </div>
@@ -43,17 +43,12 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
 
     export default {
         name: 'Bets',
-        data: () => ({
-            bets: [],
-
-        }),
-        created() {
-            let existing = localStorage.getItem('bets');
-            let parse = JSON.parse(existing);
-            this.bets = parse;
+        computed: {
+            ...mapState({bets: state => state.currentBets})
         }
     }
 </script>
