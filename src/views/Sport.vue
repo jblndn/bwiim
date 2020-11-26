@@ -19,16 +19,22 @@
         components: {
             CardBet
         },
-        data: () => ({
-            odds: []
-        }),
+        computed: {
+            odds() {
+                return this.$store.state.sportsBets[this.$route.params.sport_name]
+            }
+        },
         created() {
-            axios.get(`https://api.the-odds-api.com/v3/odds/?sport=${this.$route.params.sport_name}&region=eu&mkt=h2h&apiKey=${process.env.VUE_APP_API_KEY}`).then(response => {
-                this.odds = response.data.data;
-            }).catch(error => {
-                console.log('Error status', error.response.status)
-                console.log(error.response.data)
-            })
+            if (!this.$store.state.sportsBets[this.$route.params.sport_name]) {
+                axios.get(`https://api.the-odds-api.com/v3/odds/?sport=${this.$route.params.sport_name}&region=eu&mkt=h2h&apiKey=${process.env.VUE_APP_API_KEY}`).then(response => {
+                    this.$store.dispatch('setBets', {
+                        bets: response.data.data,
+                        leagueId: this.$route.params.sport_name,
+                    })
+                }).catch(error => {
+                    console.error('Error status', error.response.status, error.response.data)
+                })
+            }
         }
     }
 </script>
