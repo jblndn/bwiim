@@ -7,6 +7,20 @@ const store = createStore({
             sports: []
         }
     },
+    getters: {
+        sportsByGroup(state){
+            const group = state.sports.reduce((acc, value) => {
+
+                if (!acc[value.group]) {
+                    acc[value.group] = [];
+                }
+                acc[value.group].push(value);
+
+                return acc;
+            }, {});
+            return group
+        }
+    },
     mutations: {
         setSports(state, sports) {
             state.sports = sports
@@ -22,7 +36,7 @@ const store = createStore({
                 console.log(error.response.data)
             })
         }
-    }
+    },
 })
 
 export default store
