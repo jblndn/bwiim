@@ -104,7 +104,7 @@
                 this.potentialWin = (this.amount * this.selectedOdd).toFixed(2)
             },
             substractToAmount: function () {
-                if (this.amount >= 0) {
+                if (this.amount > 0) {
                     this.amount -= 5
                     this.potentialWin = (this.amount * this.selectedOdd).toFixed(2)
                 }
@@ -118,5 +118,10 @@
     .active {
         background-color: white;
         color: rgb(252, 211, 77);
+    }
+
+    button:disabled {
+        background-color: grey;
+        pointer-events: none;
     }
 </style>
