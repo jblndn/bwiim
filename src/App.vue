@@ -1,7 +1,9 @@
 <template>
   <div class="container m-auto">
     <div id="nav">
-      <router-link to="/">Sports</router-link>
+      <router-link to="/" class="mr-3">Sports</router-link>
+      |
+      <router-link to="/Bets" class="ml-3">Bets</router-link>
     </div>
     <router-view/>
   </div>
