@@ -2,7 +2,9 @@
     <div class="home">
         <div v-if="sportsByGroup">
             <div v-for="(sport, index) in sportsByGroup" :key="index">
-                <h2>{{index}}</h2>
+                <h2 class="text-2xl mb-8 font-bold">
+                    {{index}}
+                </h2>
 
                 <CardSport v-for="(s, index) in sport" :key="index" :sport="s">
                 </CardSport>
