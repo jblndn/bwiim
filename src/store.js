@@ -4,7 +4,8 @@ import axios from "axios";
 const store = createStore({
     state() {
         return {
-            sports: []
+            sports: [],
+            sportsBets: []
         }
     },
     getters: {
@@ -24,17 +25,21 @@ const store = createStore({
     mutations: {
         setSports(state, sports) {
             state.sports = sports
+        },
+        pushBets(state, {bets, leagueId}) {
+            state.sportsBets[leagueId] = bets
         }
     },
     actions: {
         getSports(context) {
-            console.log(process.env)
             axios.get(`https://api.the-odds-api.com/v3/sports/?apiKey=${process.env.VUE_APP_API_KEY}`).then(response => {
                 context.commit('setSports', response.data.data)
             }).catch(error => {
-                console.log('Error status', error.response.status)
-                console.log(error.response.data)
+                console.error('Error status', error.response.status, error.response.data)
             })
+        },
+        setBets (context, {bets, leagueId}) {
+            context.commit('pushBets', {bets, leagueId})
         }
     },
 })

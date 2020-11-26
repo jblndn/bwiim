@@ -33,9 +33,6 @@
         },
         components: {
             ButtonOdd
-        },
-        mounted() {
-            console.log(this.odd)
         }
     }
 </script>

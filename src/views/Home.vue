@@ -23,14 +23,15 @@
         },
         computed: {
             sportsByGroup() {
-                console.log(this.$store.getters.sportsByGroup)
                 return this.$store.getters.sportsByGroup
             }
         },
         created() {
-            this.$store.dispatch({
-                type: 'getSports'
-            })
+            if (Object.keys(this.sportsByGroup).length === 0 && this.sportsByGroup.constructor === Object) {
+                this.$store.dispatch({
+                    type: 'getSports'
+                })
+            }
         }
     }
 </script>
