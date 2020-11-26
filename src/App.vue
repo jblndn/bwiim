@@ -1,8 +1,10 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Sports</router-link> |
+  <div class="container m-auto">
+    <div id="nav">
+      <router-link to="/">Sports</router-link> |
+    </div>
+    <router-view/>
   </div>
-  <router-view/>
 </template>
 
 <style>
